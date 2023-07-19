@@ -1,21 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { log } from 'console';
+import { UploadDTO } from './upload.dto';
+import { Response } from 'express';
+import multer from 'multer';
+
+const upload = multer({
+  dest:"./tmp", // dir do arquivo 
+})
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  
+
   @Post()
   async create(@Body() data: UserDto) {
     return this.usersService.create(data);
   }
 
   @Get()
-  async listAll() {
-    return this.usersService.listAll();
+  async listAll(@Res() response: Response) {
+    const users = await this.usersService.listAll();
+    response.setHeader('Content-Type', 'application/json');
+    response.send(users);
   }
 
   @Patch(':userId')
@@ -28,10 +36,10 @@ export class UsersController {
     return this.usersService.delete(userId);
   }
 
-  @Post('/uploadAvatar/:userId')
+  @Patch('/uploadAvatar/:id')
   @UseInterceptors(FileInterceptor('file')) // file name
-  async uploadAvatar(@UploadedFile() file: any, @Param() userId:string) {
-    console.log(file);
-    
+  async uploadAvatar(@UploadedFile() file: UploadDTO, @Param('id') id: string) {
+    await this.usersService.uploadFile(id, file.buffer);
+    return { message: 'Arquivo enviado com sucesso!' };
   }
 }
