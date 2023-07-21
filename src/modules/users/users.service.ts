@@ -78,40 +78,23 @@ export class UsersService {
     const userAlreadyExists = await this.prisma.user.findUnique({
       where: { id },
     });
-
+    console.log(avatar);
     if (!userAlreadyExists) {
       throw new Error('User with the provided ID does not exist!');
     }
 
     const uploadDir = join(__dirname, '..','..', '..', 'tmp');
-    const imagePath = join(uploadDir, `${id}.png`);
+    const imagePath = join(uploadDir, `${userAlreadyExists.name}.png`);
 
     await fs.ensureDir(uploadDir); // Certifique-se de que o diretório existe
     await fs.writeFile(imagePath, avatar.buffer); // Salve o buffer do arquivo no diretório desejado
-
+    
     return this.prisma.user.update({
       data: {
-        avatar: imagePath,
+        avatar: imagePath, // Salve o conteúdo do arquivo como uma string base64 no campo "avatar"
       },
       where: { id },
     });
-    
-
-    // // Adicione esta validação para verificar o tipo MIME da imagem
-    // const supportedImageTypes = ['image/png', 'image/jpeg'];
-    // const imageType = avatar.slice(0, 4).toString('hex');
-    // if (!supportedImageTypes.includes(imageType)) {
-    //   throw new HttpException('Invalid image format. Only PNG and JPEG images are supported.', HttpStatus.BAD_REQUEST);
-    // }
-
-    // const avatarBase64 = avatar.toString('base64');
-
-    // return this.prisma.user.update({
-    //   data: {
-    //     avatar: avatarBase64,
-    //   },
-    //   where: { id },
-    // });
   }
 }
 

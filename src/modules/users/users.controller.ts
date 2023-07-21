@@ -35,8 +35,8 @@ export class UsersController {
   @Patch('/uploadAvatar/:id')
   @UseInterceptors(FileInterceptor('file')) // file name
   async uploadAvatar(@UploadedFile() file: Express.Multer.File, @Param('id') id: string) {
-    console.log(file);
     await this.usersService.uploadFile(id, file);
+    
     return { message: 'Arquivo enviado com sucesso!' };
   }
 }
