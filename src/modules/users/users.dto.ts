@@ -9,3 +9,11 @@ export type UserDto = {
 };
 
 
+export interface UserWithAvatar {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  createdAt: Date;
+  avatarContent?: string; // Adicione a propriedade avatarContent como opcional
+}

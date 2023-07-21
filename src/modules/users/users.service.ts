@@ -3,6 +3,7 @@ import { UserDto } from './users.dto';
 import { PrismaService } from 'src/database/Prisma.client';
 import { join } from 'path';
 import * as fs from 'fs-extra';
+import { log } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -27,23 +28,16 @@ export class UsersService {
   }
 
   async listAll() {
-    const usersWithAvatars = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        avatar: true,
-        createdAt: true,
-      },
-    });
+    const users = await this.prisma.user.findMany();
+    for (const user of users) {
+      if (user.avatar) {
+        const imagePath = join(__dirname,'..','..', '..', 'tmp', `${user.name}.png`);
+        const buffer = await fs.readFile(imagePath);
+        user.avatar = buffer.toString('base64');
+      }
+    }
 
-    // Mapeie os usuários para adicionar o avatar em formato base64
-    const usersWithAvatarsAsBase64 = usersWithAvatars.map(user => ({
-      ...user,
-      avatar: user.avatar ? user.avatar.toString() : null,
-    }));
-
-    return usersWithAvatarsAsBase64;
+    return users;
   }
 
   async update(id: string, data: UserDto) {

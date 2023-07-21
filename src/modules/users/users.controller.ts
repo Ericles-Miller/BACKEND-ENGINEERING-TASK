@@ -5,6 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Express } from 'express'
 import * as multer from 'multer';
+import { log } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -18,8 +19,8 @@ export class UsersController {
   @Get()
   async listAll(@Res() response: Response) {
     const users = await this.usersService.listAll();
-    response.setHeader('Content-Type', 'application/json');
-    response.send(users);
+    log(users)
+    return response.json(users);
   }
 
   @Patch(':userId')
