@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UserDto } from './users.dto';
 import { PrismaService } from 'src/database/Prisma.client';
-import { createWriteStream, mkdirSync, existsSync  } from 'fs';
 import { join } from 'path';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class UsersService {
@@ -73,7 +73,8 @@ export class UsersService {
     })
   }
 
-  async uploadFile(id: string, avatar: Buffer) {
+  async uploadFile(id: string, avatar: Express.Multer.File) {
+    
     const userAlreadyExists = await this.prisma.user.findUnique({
       where: { id },
     });
@@ -82,21 +83,35 @@ export class UsersService {
       throw new Error('User with the provided ID does not exist!');
     }
 
-    // Adicione esta validação para verificar o tipo MIME da imagem
-    const supportedImageTypes = ['image/png', 'image/jpeg'];
-    const imageType = avatar.slice(0, 4).toString('hex');
-    if (!supportedImageTypes.includes(imageType)) {
-      throw new HttpException('Invalid image format. Only PNG and JPEG images are supported.', HttpStatus.BAD_REQUEST);
-    }
+    const uploadDir = join(__dirname, '..','..', '..', 'tmp');
+    const imagePath = join(uploadDir, `${id}.png`);
 
-    const avatarBase64 = avatar.toString('base64');
+    await fs.ensureDir(uploadDir); // Certifique-se de que o diretório existe
+    await fs.writeFile(imagePath, avatar.buffer); // Salve o buffer do arquivo no diretório desejado
 
     return this.prisma.user.update({
       data: {
-        avatar: avatarBase64,
+        avatar: imagePath,
       },
       where: { id },
     });
+    
+
+    // // Adicione esta validação para verificar o tipo MIME da imagem
+    // const supportedImageTypes = ['image/png', 'image/jpeg'];
+    // const imageType = avatar.slice(0, 4).toString('hex');
+    // if (!supportedImageTypes.includes(imageType)) {
+    //   throw new HttpException('Invalid image format. Only PNG and JPEG images are supported.', HttpStatus.BAD_REQUEST);
+    // }
+
+    // const avatarBase64 = avatar.toString('base64');
+
+    // return this.prisma.user.update({
+    //   data: {
+    //     avatar: avatarBase64,
+    //   },
+    //   where: { id },
+    // });
   }
 }
 

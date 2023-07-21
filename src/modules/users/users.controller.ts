@@ -2,13 +2,9 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Res, UploadedFile, U
 import { UsersService } from './users.service';
 import { UserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadDTO } from './upload.dto';
 import { Response } from 'express';
-import multer from 'multer';
-
-const upload = multer({
-  dest:"./tmp", // dir do arquivo 
-})
+import { Express } from 'express'
+import * as multer from 'multer';
 
 @Controller('users')
 export class UsersController {
@@ -38,8 +34,11 @@ export class UsersController {
 
   @Patch('/uploadAvatar/:id')
   @UseInterceptors(FileInterceptor('file')) // file name
-  async uploadAvatar(@UploadedFile() file: UploadDTO, @Param('id') id: string) {
-    await this.usersService.uploadFile(id, file.buffer);
+  async uploadAvatar(@UploadedFile() file: Express.Multer.File, @Param('id') id: string) {
+    console.log(file);
+    await this.usersService.uploadFile(id, file);
     return { message: 'Arquivo enviado com sucesso!' };
   }
 }
+
+
