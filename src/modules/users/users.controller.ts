@@ -19,7 +19,6 @@ export class UsersController {
   @Get()
   async listAll(@Res() response: Response) {
     const users = await this.usersService.listAll();
-    log(users)
     return response.json(users);
   }
 
