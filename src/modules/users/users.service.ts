@@ -1,9 +1,8 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserDto } from './users.dto';
 import { PrismaService } from 'src/database/Prisma.client';
 import { join } from 'path';
 import * as fs from 'fs-extra';
-import { log } from 'console';
 
 @Injectable()
 export class UsersService {

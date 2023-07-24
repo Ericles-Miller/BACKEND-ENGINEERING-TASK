@@ -4,6 +4,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
+import { SendMailServiceProducer } from './jobs/SendMailServiceProducer';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { ConfigModule } from '@nestjs/config';
     })
   ],
   controllers: [],
-  providers: [],
+  providers: [SendMailServiceProducer],
 })
 export class AppModule {}
