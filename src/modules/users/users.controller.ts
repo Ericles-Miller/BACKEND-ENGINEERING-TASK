@@ -4,16 +4,27 @@ import { UserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Express } from 'express'
-import * as multer from 'multer';
-import { log } from 'console';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private mailService: MailerService,
+  ) {}
 
   @Post()
   async create(@Body() data: UserDto) {
-    return this.usersService.create(data);
+    const user = await this.usersService.create(data);
+
+    await this.mailService.sendMail({
+      to: user.email,
+      from: 'Team Exemplo Startup',
+      subject: `Hello ${user.email}!!`,
+      text: 'Welcome to Exemplo Startup, your registration was successful',
+    })
+
+    return user;
   }
 
   @Get()
