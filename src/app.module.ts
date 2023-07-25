@@ -4,11 +4,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
+import { SendMailModule } from './jobs/sendMail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
+    SendMailModule,
     MulterModule.register({
       dest: null,
     }),
@@ -27,10 +29,14 @@ import { ConfigModule } from '@nestjs/config';
           user: process.env.MAIL_PASS,
           pass: process.env.MAIL_PASS,
         }
-      }
-    })
+      } 
+    }),
+    BullModule.registerQueue({
+      name: 'sendMail-queue',
+    }),
   ],
   controllers: [],
   providers: [],
 })
+
 export class AppModule {}

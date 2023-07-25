@@ -4,25 +4,19 @@ import { UserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Express } from 'express'
-import { MailerService } from '@nestjs-modules/mailer';
+import { SendMailProducerService } from 'src/jobs/SendMailProducerService';
 
 @Controller('users')
 export class UsersController {
   constructor(
+    private sendMailService: SendMailProducerService,
     private readonly usersService: UsersService,
-    private mailService: MailerService,
   ) {}
 
   @Post()
   async create(@Body() data: UserDto) {
+    await this.sendMailService.sendMail(data);
     const user = await this.usersService.create(data);
-
-    await this.mailService.sendMail({
-      to: user.email,
-      from: 'Team Exemplo Startup',
-      subject: `Hello ${user.email}!!`,
-      text: 'Welcome to Exemplo Startup, your registration was successful',
-    })
 
     return user;
   }
