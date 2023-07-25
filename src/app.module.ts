@@ -28,8 +28,12 @@ import { SendMailServiceProducer } from './jobs/SendMailServiceProducer';
           user: process.env.MAIL_PASS,
           pass: process.env.MAIL_PASS,
         }
-      }
-    })
+      } 
+    }),
+    BullModule.registerQueue({
+      name: 'sendMail-queue',
+
+    }),
   ],
   controllers: [],
   providers: [SendMailServiceProducer],
