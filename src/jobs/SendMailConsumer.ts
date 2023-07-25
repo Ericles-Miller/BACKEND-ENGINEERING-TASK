@@ -9,7 +9,7 @@ export class SendMailConsumer {
 
   constructor(private mailService: MailerService) {}
 
-  @Process("sendMail-job")
+  @Process('sendMail-job')
   async sendMailJob(job: Job<UserDto>){
     const {data} = job;
 

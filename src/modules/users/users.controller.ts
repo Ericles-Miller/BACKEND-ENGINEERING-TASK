@@ -4,21 +4,20 @@ import { UserDto } from './users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { Express } from 'express'
-import { MailerService } from '@nestjs-modules/mailer';
-import { SendMailServiceProducer } from 'src/jobs/SendMailServiceProducer';
+import { SendMailProducerService } from 'src/jobs/SendMailProducerService';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private sendMailService: SendMailServiceProducer,
+    private sendMailService: SendMailProducerService,
   ) {}
 
   @Post()
   async create(@Body() data: UserDto) {
+    this.sendMailService.sendMail(data);
     const user = await this.usersService.create(data);
 
-    await this.sendMailService.sendMail(user);
     return user;
   }
 

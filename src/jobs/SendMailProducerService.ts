@@ -5,14 +5,13 @@ import { UserDto } from "src/modules/users/users.dto";
 
 
 @Injectable()
-export class SendMailServiceProducer {
+export class SendMailProducerService {
 
   constructor(
-    @InjectQueue('sendMail-queue')
-    private queue: Queue,
+    @InjectQueue('sendMail-queue') private queue: Queue
   ) {}
 
   async sendMail(user: UserDto) {
-    await this.queue.add("sendMail-job", user)
+    this.queue.add("sendMail-job", user)
   }
 }
