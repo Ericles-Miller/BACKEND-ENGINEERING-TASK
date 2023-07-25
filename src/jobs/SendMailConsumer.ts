@@ -13,7 +13,7 @@ export class SendMailConsumer {
   async sendMailJob(job: Job<UserDto>){
     const {data} = job;
 
-    this.mailService.sendMail({
+    await this.mailService.sendMail({
       to: data.email,
       from: 'Team Startup name',
       subject: 'Hello, welcome!!',

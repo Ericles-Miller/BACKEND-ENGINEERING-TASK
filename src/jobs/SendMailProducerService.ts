@@ -12,6 +12,6 @@ export class SendMailProducerService {
   ) {}
 
   async sendMail(user: UserDto) {
-    this.queue.add("sendMail-job", user)
+    await this.queue.add("sendMail-job", user)
   }
 }

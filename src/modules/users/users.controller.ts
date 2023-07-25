@@ -9,13 +9,13 @@ import { SendMailProducerService } from 'src/jobs/SendMailProducerService';
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
     private sendMailService: SendMailProducerService,
+    private readonly usersService: UsersService,
   ) {}
 
   @Post()
   async create(@Body() data: UserDto) {
-    this.sendMailService.sendMail(data);
+    await this.sendMailService.sendMail(data);
     const user = await this.usersService.create(data);
 
     return user;

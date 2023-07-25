@@ -5,6 +5,8 @@ import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
 import { SendMailProducerService } from './jobs/SendMailProducerService';
+import { SendMailConsumer } from './jobs/SendMailConsumer';
+import { UsersController } from './modules/users/users.controller';
 
 @Module({
   imports: [
@@ -35,7 +37,8 @@ import { SendMailProducerService } from './jobs/SendMailProducerService';
 
     }),
   ],
-  controllers: [],
-  providers: [SendMailProducerService],
+  controllers: [UsersController],
+  providers: [SendMailProducerService, SendMailConsumer],
 })
+
 export class AppModule {}
