@@ -4,14 +4,13 @@ import { MulterModule } from '@nestjs/platform-express';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
-import { SendMailProducerService } from './jobs/SendMailProducerService';
-import { SendMailConsumer } from './jobs/SendMailConsumer';
-import { UsersController } from './modules/users/users.controller';
+import { SendMailModule } from './jobs/sendMail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
+    SendMailModule,
     MulterModule.register({
       dest: null,
     }),
@@ -34,11 +33,10 @@ import { UsersController } from './modules/users/users.controller';
     }),
     BullModule.registerQueue({
       name: 'sendMail-queue',
-
     }),
   ],
-  controllers: [UsersController],
-  providers: [SendMailProducerService, SendMailConsumer],
+  controllers: [],
+  providers: [],
 })
 
 export class AppModule {}
