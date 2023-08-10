@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { Express } from 'express'
 import { SendMailProducerService } from 'src/jobs/SendMailProducerService';
 
-@Controller('users')
+@Controller('/users')
 export class UsersController {
   constructor(
     private sendMailService: SendMailProducerService,
