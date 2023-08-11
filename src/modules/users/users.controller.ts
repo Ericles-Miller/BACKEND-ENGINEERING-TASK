@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { Express } from 'express'
 import { SendMailProducerService } from 'src/jobs/SendMailProducerService';
 
-@Controller('users')
+@Controller('/users')
 export class UsersController {
   constructor(
     private sendMailService: SendMailProducerService,
@@ -42,7 +42,7 @@ export class UsersController {
   async uploadAvatar(@UploadedFile() file: Express.Multer.File, @Param('id') id: string) {
     await this.usersService.uploadFile(id, file);
     
-    return { message: 'Arquivo enviado com sucesso!' };
+    return { message: 'file save with success!' };
   }
 }
 
