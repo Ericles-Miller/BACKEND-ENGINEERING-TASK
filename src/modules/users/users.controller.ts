@@ -42,7 +42,7 @@ export class UsersController {
   async uploadAvatar(@UploadedFile() file: Express.Multer.File, @Param('id') id: string) {
     await this.usersService.uploadFile(id, file);
     
-    return { message: 'Send file with success!' };
+    return { message: 'file save with success!' };
   }
 }
 
