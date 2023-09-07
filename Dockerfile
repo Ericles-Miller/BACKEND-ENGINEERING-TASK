@@ -1,11 +1,11 @@
 # Use uma imagem base Node.js
-FROM node:18
+FROM node:16
 
 # Crie e defina o diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
 # Copie o package.json e o package-lock.json para o contêiner
-COPY package*.json ./
+COPY package.json ./
 
 # Instale as dependências
 RUN yarn
