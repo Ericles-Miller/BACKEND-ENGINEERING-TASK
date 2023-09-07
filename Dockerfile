@@ -1,13 +1,20 @@
-FROM node:latest
+# Use uma imagem base Node.js
+FROM node:18
 
-WORKDIR /usr/app
+# Crie e defina o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
 
-COPY package.json ./
+# Copie o package.json e o package-lock.json para o contêiner
+COPY package*.json ./
 
-RUN npm install
+# Instale as dependências
+RUN yarn
 
-COPY . . 
+# Copie o código-fonte para o contêiner
+COPY . .
 
-EXPOSE 3000
+# Exponha a porta 3000 para o mundo exterior
+EXPOSE 3333
 
-CMD [ "npm", "run", "start:dev" ]
+# Comando para iniciar o aplicativo
+CMD ["yarn", "start:dev"]
