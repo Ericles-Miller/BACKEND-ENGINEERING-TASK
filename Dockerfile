@@ -16,5 +16,6 @@ COPY . .
 # Exponha a porta 3000 para o mundo exterior
 EXPOSE 3333
 
+
 # Comando para iniciar o aplicativo
 CMD ["yarn", "start:dev"]
