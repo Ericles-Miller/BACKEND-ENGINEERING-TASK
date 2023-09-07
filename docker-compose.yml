@@ -1,32 +1,30 @@
-version: "3.8"
+version: "3"
 
 services:
   app:
     build: .
-    container_name: node_task
+    container_name: node
     ports:
-      - 3000:3000
+      - 3333:3333
     volumes:
-      - .:/usr/app
-  
-  database: 
-    image: postgres
-    container_name: database_task_node
+      - .:/usr/src/app
+    depends_on:
+      - database
+      - redis
+
+  database:
+    image: bitnami/postgresql
+    container_name: postgres_db
     restart: always
-    ports: 
+    ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=@18er0821
-      - POSTGRES_DB=API-social-media
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - POSTGRESQL_USER=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=API-Solid
 
-  
   redis:
     container_name: redis_db
     image: redis:alpine
-    ports: 
+    ports:
       - 6379:6379
-volumes:
-  postgres-data:
