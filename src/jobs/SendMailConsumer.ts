@@ -1,4 +1,4 @@
-import { MailerService } from "@nestjs-modules/mailer";
+  import { MailerService } from "@nestjs-modules/mailer";
 import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { UserDto } from "src/modules/users/users.dto";

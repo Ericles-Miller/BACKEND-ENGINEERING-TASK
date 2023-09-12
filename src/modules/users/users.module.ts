@@ -8,6 +8,6 @@ import { BullModule } from '@nestjs/bull';
 @Module({
   imports: [BullModule.registerQueue({ name: 'sendMail-queue' })],
   controllers: [UsersController],
-  providers: [UsersService, PrismaService,SendMailProducerService],
+  providers: [UsersService,SendMailProducerService],
 })
 export class UsersModule {}

@@ -5,6 +5,10 @@ import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
 import { SendMailModule } from './jobs/sendMail.module';
+import { SendMailProducerService } from './jobs/SendMailProducerService';
+import { UsersController } from './modules/users/users.controller';
+import { UsersService } from './modules/users/users.service';
+import { SendMailConsumer } from './jobs/SendMailConsumer';
 
 @Module({
   imports: [
@@ -33,10 +37,10 @@ import { SendMailModule } from './jobs/sendMail.module';
     }),
     BullModule.registerQueue({
       name: 'sendMail-queue',
-    }),
+    }), 
   ],
-  controllers: [],
-  providers: [],
+  controllers: [UsersController],
+  providers: [SendMailProducerService,SendMailConsumer, UsersService]
 })
 
 export class AppModule {}

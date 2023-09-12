@@ -3,13 +3,14 @@ import { UserDto } from './users.dto';
 import { PrismaService } from 'src/database/Prisma.client';
 import { join } from 'path';
 import * as fs from 'fs-extra';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  private prisma = new PrismaClient().user
 
   async create(data: UserDto) {
-    const emailAlreadyExists = await this.prisma.user.findFirst({
+    const emailAlreadyExists = await this.prisma.findFirst({
       where: {
         email: data.email,
       },
@@ -19,7 +20,7 @@ export class UsersService {
       throw new Error('email of user already exits!');
     }
 
-    const user = await this.prisma.user.create({
+    const user = await this.prisma.create({
       data,
     });
 
@@ -27,7 +28,7 @@ export class UsersService {
   }
 
   async listAll() {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.findMany();
     for (const user of users) {
       if (user.avatar) {
         const imagePath = join(__dirname,'..','..', '..', 'tmp', `${user.name}.png`);
@@ -40,35 +41,35 @@ export class UsersService {
   }
 
   async update(id: string, data: UserDto) {
-    const userALreadyExits = await this.prisma.user.findUnique({
+    const userALreadyExits = await this.prisma.findUnique({
       where: {id},
     });
     if(!userALreadyExits) {
       throw new Error('not exists user with id');
     }
 
-    return await this.prisma.user.update({
+    return await this.prisma.update({
       data,
       where: {id}
     })
   }
 
   async delete(id: string) {
-    const userALreadyExits = await this.prisma.user.findUnique({
+    const userALreadyExits = await this.prisma.findUnique({
       where: {id},
     });
     if(!userALreadyExits) {
       throw new Error('not exists user with id');
     }
 
-    return await this.prisma.user.delete({
+    return await this.prisma.delete({
       where: {id}
     })
   }
 
   async uploadFile(id: string, avatar: Express.Multer.File) {
     
-    const userAlreadyExists = await this.prisma.user.findUnique({
+    const userAlreadyExists = await this.prisma.findUnique({
       where: { id },
     });
     console.log(avatar);
@@ -82,7 +83,7 @@ export class UsersService {
     await fs.ensureDir(uploadDir); // Certifique-se de que o diretório existe
     await fs.writeFile(imagePath, avatar.buffer); // Salve o buffer do arquivo no diretório desejado
     
-    return this.prisma.user.update({
+    return this.prisma.update({
       data: {
         avatar: imagePath, // Salve o conteúdo do arquivo como uma string base64 no campo "avatar"
       },
