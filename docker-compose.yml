@@ -1,6 +1,24 @@
 version: "3.8"
 
 services:
+  postgres:
+    container_name: postgresql
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: apiSolid
+      PGDATA: /data/postgres
+    volumes:
+      - ./data/pg:/data/postgres
+
+  redis:
+    container_name: redis_db
+    image: redis:alpine
+    ports:
+      - 6379:6379
   app:
     build: .
     container_name: node
@@ -10,26 +28,9 @@ services:
     volumes:
       - .:/usr/src/app
     depends_on:
-      - database
+      - postgres
       - redis
 
-  database:
-    container_name: postgres_db
-    image: bitnami/postgresql
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=apisolid2
-    volumes:
-      - pgdata:/data/postgres
-
-  redis:
-    container_name: redis_db
-    image: redis:alpine
-    ports:
-      - 6379:6379
 volumes:
   pgdata:
     driver: local
