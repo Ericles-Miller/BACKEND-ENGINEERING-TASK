@@ -8,7 +8,8 @@ import { UserDto } from "src/modules/users/users.dto";
 export class SendMailProducerService {
 
   constructor(
-    @InjectQueue('sendMail-queue') private queue: Queue
+    @InjectQueue('sendMail-queue') 
+    private queue: Queue
   ) {}
 
   async sendMail(user: UserDto) {

@@ -12,7 +12,8 @@ export class SendMailConsumer {
   @Process('sendMail-job')
   async sendMailJob(job: Job<UserDto>){
     const {data} = job;
-
+    console.log(data);
+    
     await this.mailService.sendMail({
       to: data.email,
       from: 'Team Startup name',
