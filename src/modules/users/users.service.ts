@@ -7,7 +7,7 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  private prisma = new PrismaClient().user
+  private prisma = new PrismaClient().user;
 
   async create(data: UserDto) {
     const emailAlreadyExists = await this.prisma.findFirst({
