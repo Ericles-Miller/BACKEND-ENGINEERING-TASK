@@ -1,21 +1,16 @@
-# Use uma imagem base Node.js
-FROM node:18
+FROM node:alpine
 
-# Crie e defina o diretório de trabalho dentro do contêiner
-WORKDIR /usr/src/app
+# Instale o Yarn
+RUN npm install -g yarn
 
-# Copie o package.json e o package-lock.json para o contêiner
-COPY package*.json ./
+WORKDIR /usr/app
 
-# Instale as dependências
-RUN yarn
+COPY package.json ./
 
-# Copie o código-fonte para o contêiner
-COPY . .
+RUN yarn 
 
-# Exponha a porta 3000 para o mundo exterior
+COPY . . 
+
 EXPOSE 3333
 
-
-# Comando para iniciar o aplicativo
 CMD ["yarn", "start:dev"]

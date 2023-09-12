@@ -14,7 +14,7 @@ export class UsersController {
   ) {}
 
   @Post()
-  async create(@Body() data: UserDto) {
+  async create(@Body() data: UserDto) {  
     await this.sendMailService.sendMail(data);
     const user = await this.usersService.create(data);
 
