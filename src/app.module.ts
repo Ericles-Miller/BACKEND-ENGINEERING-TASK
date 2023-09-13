@@ -4,7 +4,7 @@
   import { BullModule } from '@nestjs/bull';
   import { MailerModule } from '@nestjs-modules/mailer';
   import { ConfigModule } from '@nestjs/config';
-  import { SendMailModule } from './jobs/sendMail.module';
+  // import { SendMailModule } from './jobs/sendMail.module';
   import { SendMailProducerService } from './jobs/SendMailProducerService';
   import { UsersController } from './modules/users/users.controller';
   import { UsersService } from './modules/users/users.service';
@@ -14,7 +14,6 @@
     imports: [
       ConfigModule.forRoot(),
       UsersModule,
-      SendMailModule,
       MulterModule.register({
         dest: null,
       }),
@@ -26,9 +25,9 @@
         },
       }),
       
-      // BullModule.registerQueue({
-      //   name: 'sendMail-queue',
-      // }), 
+      BullModule.registerQueue({
+        name: 'sendMail-queue',
+      }), 
 
       MailerModule.forRoot({
         transport: {
