@@ -4,7 +4,6 @@
   import { BullModule } from '@nestjs/bull';
   import { MailerModule } from '@nestjs-modules/mailer';
   import { ConfigModule } from '@nestjs/config';
-  // import { SendMailModule } from './jobs/sendMail.module';
   import { SendMailProducerService } from './jobs/SendMailProducerService';
   import { UsersController } from './modules/users/users.controller';
   import { UsersService } from './modules/users/users.service';

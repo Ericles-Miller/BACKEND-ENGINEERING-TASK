@@ -13,6 +13,8 @@ export class SendMailProducerService {
   ) {}
 
   async sendMail(user: UserDto) {
-    await this.queue.add("sendMail-job", user)
+    await this.queue.add("sendMail-job", user, {
+      
+    })
   }
 }
