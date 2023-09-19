@@ -14,7 +14,7 @@ export class SendMailProducerService {
 
   async sendMail(user: UserDto) {
     await this.queue.add("sendMail-job", user, {
-      
+      delay: 5000,
     })
   }
 }

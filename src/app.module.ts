@@ -1,13 +1,17 @@
-  import { Module } from '@nestjs/common';
-  import { UsersModule } from './modules/users/users.module';
-  import { MulterModule } from '@nestjs/platform-express';
-  import { BullModule } from '@nestjs/bull';
-  import { MailerModule } from '@nestjs-modules/mailer';
-  import { ConfigModule } from '@nestjs/config';
-  import { SendMailProducerService } from './jobs/SendMailProducerService';
-  import { UsersController } from './modules/users/users.controller';
-  import { UsersService } from './modules/users/users.service';
-  import { SendMailConsumer } from './jobs/SendMailConsumer';
+import { Module } from '@nestjs/common';
+import { UsersModule } from './modules/users/users.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { BullModule, InjectQueue } from '@nestjs/bull';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule } from '@nestjs/config';
+import { SendMailProducerService } from './jobs/SendMailProducerService';
+import { UsersController } from './modules/users/users.controller';
+import { UsersService } from './modules/users/users.service';
+import { SendMailConsumer } from './jobs/SendMailConsumer';
+import { Queue } from 'bull';
+import { createBullBoard } from 'bull-board';
+import { BullAdapter } from 'bull-board/bullAdapter';
+import { MiddlewareBuilder } from '@nestjs/core/middleware';
 
   @Module({
     imports: [
@@ -43,4 +47,17 @@
     providers: [SendMailProducerService,SendMailConsumer, UsersService]
   })
 
-  export class AppModule {}
+  export class AppModule {
+    constructor(
+      @InjectQueue('sendMail-queue') 
+      private sendMailQueue: Queue
+    ) {}
+
+    configure(consumer: MiddlewareBuilder) {
+      const { router } = createBullBoard([
+        new BullAdapter(this.sendMailQueue)
+      ]); 
+
+      consumer.apply(router).forRoutes('/admin/queues');
+    }
+  }
