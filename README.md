@@ -33,15 +33,15 @@ $ yarn
 ```
 
 ## Creating Required Files
-<p align="center"> Create a .env file following the .env.test file template.It will contain the settings for connecting to the database and ethereal email</p>
-<p align="center"> Additionally, run the docker up command to start the redis and postgres containers</p>
-```bash
-$ docker compose up -d --force-recreate
-```
+<p> Create a .env file following the .env.test file template.It will contain the settings for connecting to the database and ethereal email</p>
+<p> Additionally, run the docker up command to start the redis and postgres containers</p>
 
 ## Running the app
 
 ```bash
+# containers
+$ docker compose up -d --force-recreate
+
 # development
 $ yarn run start
 
