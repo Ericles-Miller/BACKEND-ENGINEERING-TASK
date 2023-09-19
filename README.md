@@ -29,7 +29,14 @@
 ## Installation
 
 ```bash
-$ yarn install
+$ yarn 
+```
+
+## Creating Required Files
+<p align="center"> Create a .env file following the .env.test file template.It will contain the settings for connecting to the database and ethereal email</p>
+<p align="center"> Additionally, run the docker up command to start the redis and postgres containers</p>
+```bash
+$ docker compose up -d --force-recreate
 ```
 
 ## Running the app
@@ -62,11 +69,6 @@ $ yarn run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
