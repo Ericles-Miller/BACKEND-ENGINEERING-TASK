@@ -13,13 +13,20 @@ export class SendMailConsumer {
   async sendMailJob(job: Job<UserDto>){
     const {data} = job;
     
-    await this.mailService.sendMail({
-      to: data.email,
-      from: 'Team Startup name',
-      subject: 'Hello, welcome!!',
-      text: `Hi ${data.name}, you register will make with success! `,
-    });
-    console.log(data);
+    try {
+      await this.mailService.sendMail({
+        to: data.email,
+        from: 'Team Startup name',
+        subject: 'Hello, welcome!!',
+        text: `Hi ${data.name}, you registered successfully!`,
+      });
+
+      // Registro de sucesso (opcional)
+      console.log(`Email enviado com sucesso para ${data.email}`);
+    } catch (error) {
+      // Registro de erro
+      console.error(`Erro ao enviar e-mail para ${data.email}:`, error);
+    }
   }
 
   @OnQueueCompleted()
